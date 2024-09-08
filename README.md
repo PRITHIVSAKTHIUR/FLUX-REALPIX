@@ -104,6 +104,8 @@ Weights for this model are available in Safetensors format.
 
 [Download](/prithivMLmods/Canopus-LoRA-Flux-FaceRealism/tree/main) them in the Files & versions tab.
 
+![Image 5](assets/Flux.png)
+
 .
 
 .
