@@ -33,7 +33,6 @@ Check out the configuration reference at https://huggingface.co/docs/hub/spaces-
 | ![Image 1](assets/11.png) | ![Image 2](assets/22.png) | ![Image 3](assets/33.png) |
 |--------------------------|--------------------------|--------------------------|
 | ![Image 4](assets/44.png) | ![Image 5](assets/55.webp) | ![Image 6](assets/66.png) |
-|--------------------------|--------------------------|--------------------------|
 | ![Image 7](assets/77.png) | ![Image 8](assets/88.png) | ![Image 9](assets/99.png) |
 
 
