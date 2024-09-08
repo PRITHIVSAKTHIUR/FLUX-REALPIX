@@ -1,0 +1,7 @@
+torch
+diffusers
+spaces
+transformers
+peft
+sentencepiece
+gradio
