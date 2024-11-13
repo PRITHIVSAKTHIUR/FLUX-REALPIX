@@ -8,7 +8,16 @@ import uuid
 from typing import Tuple
 import numpy as np
 
-DESCRIPTIONz = """## FLUX REALISM 🔥"""
+DESCRIPTIONz = """## FLUX REALISM 🦁"""
+
+
+DESCRIPTIONy = """
+            <p align="left">
+            <a title="Github" href="https://github.com/PRITHIVSAKTHIUR/FLUX-REALPIX" target="_blank" rel="noopener noreferrer" style="display: inline-block;">
+                <img src="https://img.shields.io/github/stars/PRITHIVSAKTHIUR/FLUX-REALPIX?label=GitHub%20%E2%98%85&logo=github&color=C8C" alt="badge-github-stars">
+            </a>
+            </p>
+"""
 
 def save_image(img):
     unique_name = str(uuid.uuid4()) + ".png"
@@ -28,10 +37,10 @@ if not torch.cuda.is_available():
 base_model = "black-forest-labs/FLUX.1-dev"
 pipe = DiffusionPipeline.from_pretrained(base_model, torch_dtype=torch.bfloat16)
 
-lora_repo = "prithivMLmods/Canopus-LoRA-Flux-FaceRealism"
-trigger_word = "Realism"  # Leave trigger_word blank if not used.
-pipe.load_lora_weights(lora_repo)
+lora_repo = "strangerzonehf/Flux-Super-Realism-LoRA"
+trigger_word = "Super Realism"  # Leave trigger_word blank if not used.
 
+pipe.load_lora_weights(lora_repo)
 pipe.to("cuda")
 
 style_list = [
@@ -84,7 +93,7 @@ def generate(
         width=width,
         height=height,
         guidance_scale=guidance_scale,
-        num_inference_steps=16,
+        num_inference_steps=28,
         num_images_per_prompt=1,
         output_type="pil",
     ).images
@@ -116,7 +125,7 @@ examples = [
 
 
 css = '''
-.gradio-container{max-width: 575px !important}
+.gradio-container{max-width: 595px !important}
 h1{text-align:center}
 footer {
     visibility: hidden
@@ -125,6 +134,7 @@ footer {
 
 with gr.Blocks(css=css, theme="bethecloud/storj_theme") as demo:
     gr.Markdown(DESCRIPTIONz)
+
     with gr.Row():
         prompt = gr.Text(
             label="Prompt",
@@ -176,7 +186,7 @@ with gr.Blocks(css=css, theme="bethecloud/storj_theme") as demo:
                 minimum=1,
                 maximum=40,
                 step=1,
-                value=16,
+                value=28,
             )
 
         style_selection = gr.Radio(
@@ -187,8 +197,6 @@ with gr.Blocks(css=css, theme="bethecloud/storj_theme") as demo:
             value=DEFAULT_STYLE_NAME,
             label="Quality Style",
         )
-
-
 
     gr.Examples(
         examples=examples,
@@ -219,11 +227,24 @@ with gr.Blocks(css=css, theme="bethecloud/storj_theme") as demo:
     
     gr.Markdown("### Generated Images")
     predefined_gallery = gr.Gallery(label="Generated Images", columns=3, show_label=False, value=load_predefined_images())
+
     gr.Markdown("**Disclaimer/Note:**")
+
+    gr.Markdown(DESCRIPTIONy)
     
-    gr.Markdown("🔥This space provides realistic image generation, which works better for human faces and portraits. Realistic trigger works properly, better for photorealistic trigger words, close-up shots, face diffusion, male, female characters.")
+    #gr.Markdown("🔥This space provides realistic image generation, which works better for human faces and portraits. Realistic trigger works properly, better for photorealistic trigger words, close-up shots, face diffusion, male, female characters.")
    
-    gr.Markdown("🔥users are accountable for the content they generate and are responsible for ensuring it meets appropriate ethical standards.")
-    
+    #gr.Markdown("🔥users are accountable for the content they generate and are responsible for ensuring it meets appropriate ethical standards.")
+
+    gr.Markdown("""
+    <div style='text-align: justify;'>
+    🔥This space provides realistic image generation, which works better for human faces and portraits. Realistic trigger works properly, better for photorealistic trigger words, close-up shots, face diffusion, male, female characters.
+    </div>""")
+
+    gr.Markdown("""
+    <div style='text-align: justify;'>
+    🔥Users are accountable for the content they generate and are responsible for ensuring it meets appropriate ethical standards.
+    </div>""")
+
 if __name__ == "__main__":
     demo.queue(max_size=40).launch()
