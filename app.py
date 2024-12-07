@@ -8,17 +8,6 @@ import uuid
 from typing import Tuple
 import numpy as np
 
-DESCRIPTIONz = """## FLUX REALISM 🦁"""
-
-
-DESCRIPTIONy = """
-            <p align="left">
-            <a title="Github" href="https://github.com/PRITHIVSAKTHIUR/FLUX-REALPIX" target="_blank" rel="noopener noreferrer" style="display: inline-block;">
-                <img src="https://img.shields.io/github/stars/PRITHIVSAKTHIUR/FLUX-REALPIX?label=GitHub%20%E2%98%85&logo=github&color=C8C" alt="badge-github-stars">
-            </a>
-            </p>
-"""
-
 def save_image(img):
     unique_name = str(uuid.uuid4()) + ".png"
     img.save(unique_name)
@@ -101,110 +90,102 @@ def generate(
     print(image_paths)
     return image_paths, seed
 
-
-def load_predefined_images():
-    predefined_images = [
-        "assets/11.png",
-        "assets/22.png",
-        "assets/33.png",
-        "assets/44.png",
-        "assets/55.webp",
-        "assets/66.png",
-        "assets/77.png",
-        "assets/88.png",
-        "assets/99.png",
-    ]
-    return predefined_images
-
-
-
 examples = [
-    "A portrait of an attractive woman in her late twenties with light brown hair and purple, wearing large a a yellow sweater. She is looking directly at the camera, standing outdoors near trees.. --ar 128:85 --v 6.0 --style raw",
-    "A photo of the model wearing a white bodysuit and beige trench coat, posing in front of a train station with hands on head, soft light, sunset, fashion photography, high resolution, 35mm lens, f/22, natural lighting, global illumination. --ar 85:128 --v 6.0 --style raw",
+    "Woman in a red jacket, snowy, in the style of hyper-realistic portraiture, caninecore, mountainous vistas, timeless beauty, palewave, iconic, distinctive noses --ar 72:101 --stylize 750 --v 6",
+    "Super Realism, Headshot of handsome young man, wearing dark gray sweater with buttons and big shawl collar, brown hair and short beard, serious look on his face, black background, soft studio lighting, portrait photography --ar 85:128 --v 6.0 --style",
+    "Super Realism, High-resolution photograph, woman, UHD, photorealistic, shot on a Sony A7III --chaos 20 --ar 1:2 --style raw --stylize 250",
+    "Super-realism, Purple Dreamy, a medium-angle shot of a young woman with long brown hair, wearing a pair of eye-level glasses, stands in front of a backdrop of purple and white lights. The womans eyes are closed, her lips are slightly parted, as if she is looking up at the sky. Her hair is cascading over her shoulders, framing her face. She is wearing a sleeveless top, adorned with tiny white dots, and a gold chain necklace around her neck. Her left earrings are dangling from her ears, adding a pop of color to the scene."
 ]
 
-
 css = '''
-.gradio-container{max-width: 595px !important}
+.gradio-container{max-width: 888px !important}
 h1{text-align:center}
 footer {
     visibility: hidden
 }
+.submit-btn {
+    background-color: #e34949 !important;
+    color: white !important;
+}
+.submit-btn:hover {
+    background-color: #ff3b3b !important;
+}
 '''
 
 with gr.Blocks(css=css, theme="bethecloud/storj_theme") as demo:
-    gr.Markdown(DESCRIPTIONz)
-
     with gr.Row():
-        prompt = gr.Text(
-            label="Prompt",
-            show_label=False,
-            max_lines=1,
-            placeholder="Enter your prompt",
-            container=False,
-        )
-        run_button = gr.Button("Run", scale=0)
-    result = gr.Gallery(label="Result", columns=1, show_label=False) 
-    
-    with gr.Accordion("Advanced options", open=False, visible=True):
-        seed = gr.Slider(
-            label="Seed",
-            minimum=0,
-            maximum=MAX_SEED,
-            step=1,
-            value=0,
-            visible=True
-        )
-        randomize_seed = gr.Checkbox(label="Randomize seed", value=True)
-        
-        with gr.Row(visible=True):
-            width = gr.Slider(
-                label="Width",
-                minimum=512,
-                maximum=2048,
-                step=64,
-                value=1024,
+        with gr.Column(scale=1):
+            prompt = gr.Text(
+                label="Prompt",
+                show_label=False,
+                max_lines=1,
+                placeholder="Enter your prompt",
+                container=False,
             )
-            height = gr.Slider(
-                label="Height",
-                minimum=512,
-                maximum=2048,
-                step=64,
-                value=1024,
-            )
-        
-        with gr.Row():
-            guidance_scale = gr.Slider(
-                label="Guidance Scale",
-                minimum=0.1,
-                maximum=20.0,
-                step=0.1,
-                value=3.0,
-            )
-            num_inference_steps = gr.Slider(
-                label="Number of inference steps",
-                minimum=1,
-                maximum=40,
-                step=1,
-                value=28,
-            )
+            run_button = gr.Button("Generate as ( 768 x 1024 )🤗", scale=0, elem_classes="submit-btn")
+            
+            with gr.Accordion("Advanced options", open=True, visible=True):
+                seed = gr.Slider(
+                    label="Seed",
+                    minimum=0,
+                    maximum=MAX_SEED,
+                    step=1,
+                    value=0,
+                    visible=True
+                )
+                randomize_seed = gr.Checkbox(label="Randomize seed", value=True)
+                
+                with gr.Row(visible=True):
+                    width = gr.Slider(
+                        label="Width",
+                        minimum=512,
+                        maximum=2048,
+                        step=64,
+                        value=768,
+                    )
+                    height = gr.Slider(
+                        label="Height",
+                        minimum=512,
+                        maximum=2048,
+                        step=64,
+                        value=1024,
+                    )
+                
+                with gr.Row():
+                    guidance_scale = gr.Slider(
+                        label="Guidance Scale",
+                        minimum=0.1,
+                        maximum=20.0,
+                        step=0.1,
+                        value=3.0,
+                    )
+                    num_inference_steps = gr.Slider(
+                        label="Number of inference steps",
+                        minimum=1,
+                        maximum=40,
+                        step=1,
+                        value=28,
+                    )
 
-        style_selection = gr.Radio(
-            show_label=True,
-            container=True,
-            interactive=True,
-            choices=STYLE_NAMES,
-            value=DEFAULT_STYLE_NAME,
-            label="Quality Style",
-        )
-
-    gr.Examples(
-        examples=examples,
-        inputs=prompt,
-        outputs=[result, seed],
-        fn=generate,
-        cache_examples=False,
-    )
+                style_selection = gr.Radio(
+                    show_label=True,
+                    container=True,
+                    interactive=True,
+                    choices=STYLE_NAMES,
+                    value=DEFAULT_STYLE_NAME,
+                    label="Quality Style",
+                )
+        
+        with gr.Column(scale=2):
+            result = gr.Gallery(label="Result", columns=1, show_label=False)
+            
+            gr.Examples(
+                examples=examples,
+                inputs=prompt,
+                outputs=[result, seed],
+                fn=generate,
+                cache_examples=False,
+            )
 
     gr.on(
         triggers=[
@@ -224,27 +205,6 @@ with gr.Blocks(css=css, theme="bethecloud/storj_theme") as demo:
         outputs=[result, seed],
         api_name="run",
     )
-    
-    gr.Markdown("### Generated Images")
-    predefined_gallery = gr.Gallery(label="Generated Images", columns=3, show_label=False, value=load_predefined_images())
-
-    gr.Markdown("**Disclaimer/Note:**")
-
-    gr.Markdown(DESCRIPTIONy)
-    
-    #gr.Markdown("🔥This space provides realistic image generation, which works better for human faces and portraits. Realistic trigger works properly, better for photorealistic trigger words, close-up shots, face diffusion, male, female characters.")
-   
-    #gr.Markdown("🔥users are accountable for the content they generate and are responsible for ensuring it meets appropriate ethical standards.")
-
-    gr.Markdown("""
-    <div style='text-align: justify;'>
-    🔥This space provides realistic image generation, which works better for human faces and portraits. Realistic trigger works properly, better for photorealistic trigger words, close-up shots, face diffusion, male, female characters.
-    </div>""")
-
-    gr.Markdown("""
-    <div style='text-align: justify;'>
-    🔥Users are accountable for the content they generate and are responsible for ensuring it meets appropriate ethical standards.
-    </div>""")
 
 if __name__ == "__main__":
     demo.queue(max_size=40).launch()
